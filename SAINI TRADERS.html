@@ -1,0 +1,475 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Crunchy Snacks</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 (CSS) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --accent:#ff7a18;
+      --accent-2:#ffb199;
+      --muted:#6c757d;
+      --card-radius:18px;
+      --glass: rgba(255,255,255,0.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(255,122,24,0.08), transparent 10%),
+                  linear-gradient(180deg,#fff 0%, #fff 100%);
+      color:#222;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding-bottom:4rem;
+    }
+
+    /* Navbar */
+    .navbar-brand { font-weight:700; letter-spacing:0.2px; }
+    .badge-accent { background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:white; border-radius:999px; padding:0.35rem 0.7rem; font-weight:600; }
+
+    /* Hero */
+    .hero {
+      border-radius: 22px;
+      padding: 3rem;
+      background: linear-gradient(135deg, rgba(255,122,24,0.12), rgba(255,177,153,0.05));
+      box-shadow: 0 8px 24px rgba(15,15,15,0.06);
+      margin-top: 1.5rem;
+    }
+    .hero .cta {
+      background: linear-gradient(90deg,var(--accent),var(--accent-2));
+      color:white;
+      border-radius:12px;
+      padding:0.7rem 1.1rem;
+      font-weight:700;
+      border: none;
+    }
+    .hero-visual {
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow: 0 12px 30px rgba(255,122,24,0.08);
+    }
+
+    /* Product cards */
+    .product-card{
+      border-radius:var(--card-radius);
+      overflow:hidden;
+      transition:transform .22s ease, box-shadow .22s ease;
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.82));
+      border:1px solid rgba(0,0,0,0.04);
+    }
+    .product-card:hover{ transform: translateY(-6px); box-shadow: 0 18px 40px rgba(18,18,18,0.06); }
+
+    .product-img{
+      height:160px;
+      object-fit:cover;
+      width:100%;
+      display:block;
+    }
+    .price {
+      font-weight:700;
+      font-size:1.05rem;
+      color:var(--accent);
+    }
+
+    /* Cart */
+    .cart-panel {
+      width: 360px;
+      max-width: 95vw;
+      border-radius:12px;
+    }
+    .cart-empty { color:var(--muted); text-align:center; padding:2rem 1rem; }
+
+    /* Footer */
+    footer { margin-top:3rem; padding:2rem 0; color:#525252; }
+
+    /* small UI niceties */
+    .pill { padding: 0.25rem 0.6rem; border-radius:999px; font-weight:600; font-size:0.85rem; display:inline-block; }
+    .ribbon {
+      position: absolute;
+      right:12px; top:12px;
+      background: linear-gradient(90deg,var(--accent),var(--accent-2));
+      color:white; padding:0.35rem 0.6rem; border-radius:999px; font-size:0.85rem; font-weight:700;
+      box-shadow:0 6px 18px rgba(255,122,24,0.12);
+    }
+    @media (max-width:768px){
+      .hero { padding:1.6rem; }
+      .product-img{ height:140px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg navbar-light px-3">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <img src="https://static.vecteezy.com/system/resources/previews/005/013/755/non_2x/snack-logo-design-with-cassava-chips-icon-and-letter-s-initials-free-vector.jpg" width="80" height="100" class="rounded-circle" alt="logo">
+        <div>
+          Sunil Traders  <div style="font-size:12px;color:var(--muted);font-weight:600">Snacks • Treats • Drinks</div>
+        </div>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navmenu">
+        <ul class="navbar-nav ms-auto me-3 mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#products">Shop</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        </ul>
+
+        <div class="d-flex gap-2 align-items-center">
+          <button id="cartBtn" class="btn btn-outline-secondary position-relative">
+            <i class="bi bi-cart3"></i>
+            <span id="cartCount" class="badge bg-danger ms-2" style="display:none;">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- HERO -->
+    <div class="hero d-flex gap-4 align-items-center">
+      <div class="flex-grow-1">
+        <h1 style="font-size:2.1rem;margin-bottom:.2rem;">Fresh snacks delivered fast — <span class="badge-accent">Tasty deals</span></h1>
+        <p style="color:var(--muted);margin-bottom:1.2rem;">
+          Crunchy chips, sweet bites, healthy nuts and refreshing drinks — discover curated snacks with great prices and speedy delivery.
+        </p>
+
+        <div class="d-flex gap-2">
+          <button class="cta" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Bestsellers</button>
+          <button class="btn btn-outline-primary" onclick="highlightSale()">Today's Offer</button>
+        </div>
+
+        <div class="mt-3" style="color:var(--muted);font-size:.95rem;">
+          <i class="bi bi-check-circle-fill text-success"></i> Hygiene assured • <i class="bi bi-clock-history"></i> Express delivery
+        </div>
+      </div>
+
+      <div class="hero-visual d-none d-md-block" style="width:320px;">
+        <img src="https://64.media.tumblr.com/5d103bc11e79b18e4724b89221ee2d21/67259ea62a3d458f-d9/s1280x1920/e2e821ff3e4c5eb24ebe1ddb20e4785047df1e6e.jpg" alt="snacks" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+    </div>
+
+    <!-- FILTER + SEARCH -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mt-4 mb-3 gap-3">
+      <div class="input-group" style="max-width:520px;">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input id="searchInput" oninput="renderProducts()" class="form-control" placeholder="Search snacks (chips, cookies, nuts...)" />
+        <select id="categoryFilter" onchange="renderProducts()" class="form-select" style="max-width:160px;">
+          <option value="all">All</option>
+          <option value="Snacks">Sacks</option>
+          <option value="Pan Masala">Pan Masala</option>
+          <option value="Disposal">Disposal</option>
+          <option value="Candy">Candy</option>
+        </select>
+      </div>
+
+      <div class="d-flex gap-2 align-items-center">
+        <div class="pill" id="cartSummaryTop">Cart: <strong id="topTotal">₹0</strong></div>
+        <button class="btn btn-outline-secondary btn-sm" onclick="clearDemoData()">Reset Demo</button>
+      </div>
+    </div>
+
+    <!-- PRODUCTS GRID -->
+    <section id="products">
+      <div id="productGrid" class="row g-3">
+        <!-- JS populates product cards -->
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="mt-5">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <h3>my Crunchy Corner?</h3>
+          <p style="color:var(--muted)">
+            We select snacks from trusted brands and small-batch makers. Every order is packed hygienically and dispatched quickly. Explore deals, try combos, and enjoy quick customer support.
+          </p>
+          <ul>
+            <li>Curated snacks & beverages</li>
+            <li>Daily deals & bundle discounts</li>
+            <li>Secure checkout & fast delivery</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <img src="https://www.haldiram.com/media/.renditions/wysiwyg/homepage/Savouries_Banner_1_.jpg?auto=webp&format=pjpg&quality=85" alt="about" class="img-fluid rounded-3">
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="mt-5">
+      <h4>Contact & Orders</h4>
+      <div class="row">
+        <div class="col-md-6">
+          <form id="contactForm" onsubmit="submitContactForm(event)">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input id="contactName" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Phone or Email</label>
+              <input id="contactInfo" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Message</label>
+              <textarea id="contactMsg" class="form-control" rows="3" required></textarea>
+            </div>
+            <button class="btn btn-primary">Send</button>
+          </form>
+        </div>
+        <div class="col-md-6">
+          <div class="p-3" style="background:var(--glass);border-radius:12px;">
+            <h6>Store details</h6>
+            <p style="color:var(--muted);margin-bottom:0.2rem;"><strong>Open:</strong> Mon–Sat, 9:00–20:00</p>
+            <p style="color:var(--muted);margin-bottom:0.2rem;"><strong>Delivery:</strong> City-hansi 60–90 mins</p>
+            <p style="color:var(--muted);"><strong>Phone:</strong> +91 8950758470 </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CART OFFCANVAS -->
+  <div class="offcanvas offcanvas-end cart-panel" tabindex="-1" id="cartPanel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Your Cart</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+      <div id="cartItems" class="mb-3" style="min-height:120px;"></div>
+
+      <div class="mt-auto">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="text-muted">Subtotal</div>
+          <div id="subtotal" style="font-weight:700">₹0</div>
+        </div>
+        <div class="d-grid gap-2">
+          <button class="btn btn-success" onclick="checkout()">Checkout</button>
+          <button class="btn btn-outline-secondary" onclick="clearCart()">Clear Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>© <strong>Crunchy Corner</strong> — Made with <span style="color:#ff7a18">❤</span></div>
+      <div style="color:var(--muted)">Built for demo • Replace images & text freely</div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ---------------------
+    // Demo product data
+    // ---------------------
+    const PRODUCTS = [
+      { id: 'p1', title: 'Crax', category:'Snacks', price: 5, img:'https://m.media-amazon.com/images/S/aplus-media-library-service-media/fc0eeb5d-f43a-4391-b11f-846f9ace6c79.__CR0,0,970,600_PT0_SX970_V1___.jpg', badge:'Bestseller' },
+      { id: 'p2', title: 'Tansan', category:'Pan Masala', price: 150, img:'https://www.mypaanshop.com/image/cache/catalog/tn4-1000x1000w.jpg' },
+      { id: 'p3', title: 'Tea Cup', category:'Disposal', price: 50, img:'https://th.bing.com/th/id/R.e680c00028a0cd1b3f5e7c3e647e6961?rik=VGc2xieDOsUK6g&riu=http%3a%2f%2fx3.sdimgs.com%2fsd_static%2fa%2f58864%2fGEN%2bPaper%2bHot%2bCup.JPG&ehk=%2baCGkXRGs6TDaSXAPg4Xax84Uel1KURi%2fTPScYTQS%2fQ%3d&risl=&pid=ImgRaw&r=0', badge:'New' },
+      { id: 'p4', title: 'Candy', category:'Candy', price: 100, img:'https://thdailymagazine.com/wp-content/uploads/2023/06/All-You-Need.jpg' },
+      { id: 'p5', title: 'Bala ji ', category:'Snacks', price: 10, img:'https://media.potatopro.com/balaji-products-1200.jpg?width=480&height=295&crop=smart&mode=crop' },
+      { id: 'p6', title: 'Siggnature', category:'Pan Masala', price: 350, img:'https://www.garagemedia.net/wp-content/uploads/2021/07/db-siggnature.jpg' },
+      { id: 'p7', title: 'Coffee Cup', category:'Disposal', price: 70, img:'https://ecomarch.com/wp-content/uploads/2024/01/Types-Pros-of-Disposable-Cups.jpg' },
+      { id: 'p8', title: 'Pulse', category:'Candy', price: 120, img:'https://tse4.mm.bing.net/th/id/OIP.TtiK4JCtuRGF3enwjQJj_AHaFO?rs=1&pid=ImgDetMain&o=7&rm=3' }
+    ];
+
+    // ---------------------
+    // App state
+    // ---------------------
+    let CART = {}; // {productId: quantity}
+    const cartPanel = new bootstrap.Offcanvas(document.getElementById('cartPanel'));
+
+    // ---------------------
+    // Render products
+    // ---------------------
+    function renderProducts(){
+      const grid = document.getElementById('productGrid');
+      const q = (document.getElementById('searchInput').value || '').toLowerCase();
+      const cat = document.getElementById('categoryFilter').value;
+
+      const filtered = PRODUCTS.filter(p => {
+        const matchQ = p.title.toLowerCase().includes(q) || (p.category || '').includes(q);
+        const matchCat = cat === 'all' || p.category === cat;
+        return matchQ && matchCat;
+      });
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="product-card p-2 position-relative">
+            ${p.badge ? `<div class="ribbon">${p.badge}</div>` : ''}
+            <img class="product-img" src="${p.img}" alt="${escapeHtml(p.title)}">
+            <div class="p-2">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <div style="font-weight:700">${escapeHtml(p.title)}</div>
+                  <div style="color:var(--muted);font-size:.9rem">${capitalize(p.category)}</div>
+                </div>
+                <div class="price">₹${p.price}</div>
+              </div>
+              <div class="d-flex gap-2 mt-2">
+                <button class="btn btn-sm btn-outline-primary flex-grow-1" onclick="quickView('${p.id}')">
+                  <i class="bi bi-eye"></i> Quick view
+                </button>
+                <button class="btn btn-sm btn-primary" onclick="addToCart('${p.id}')">
+                  <i class="bi bi-cart-plus"></i> Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('') || `<div class="col-12"><div class="p-4 text-center text-muted">No products found.</div></div>`;
+
+      updateTopSummary();
+    }
+
+    // ---------------------
+    // Cart logic
+    // ---------------------
+    function addToCart(id, qty=1){
+      CART[id] = (CART[id] || 0) + qty;
+      showCart();
+      renderCartItems();
+      updateBadge();
+    }
+    function removeFromCart(id){
+      delete CART[id];
+      renderCartItems();
+      updateBadge();
+    }
+    function changeQty(id, delta){
+      const current = CART[id] || 0;
+      const next = current + delta;
+      if(next <= 0){ removeFromCart(id); } else { CART[id] = next; }
+      renderCartItems(); updateBadge();
+    }
+    function clearCart(){ CART = {}; renderCartItems(); updateBadge(); }
+
+    function renderCartItems(){
+      const container = document.getElementById('cartItems');
+      const keys = Object.keys(CART);
+      if(keys.length === 0){
+        container.innerHTML = `<div class="cart-empty">Your cart is empty. Add some tasty snacks!</div>`;
+        document.getElementById('subtotal').textContent = '₹0';
+        return;
+      }
+
+      let subtotal = 0;
+      container.innerHTML = keys.map(id=>{
+        const p = PRODUCTS.find(x=>x.id===id);
+        const qty = CART[id];
+        const line = p.price * qty;
+        subtotal += line;
+        return `
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <img src="${p.img}" width="64" height="64" class="rounded-2" style="object-fit:cover">
+            <div class="flex-grow-1">
+              <div style="font-weight:700">${escapeHtml(p.title)}</div>
+              <div style="color:var(--muted);font-size:.9rem">₹${p.price} × ${qty} = ₹${line}</div>
+            </div>
+            <div class="d-flex flex-column gap-1">
+              <button class="btn btn-sm btn-outline-secondary" onclick="changeQty('${id}',1)">+</button>
+              <button class="btn btn-sm btn-outline-secondary" onclick="changeQty('${id}',-1)">−</button>
+              <button class="btn btn-sm btn-link text-danger" onclick="removeFromCart('${id}')">Remove</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('subtotal').textContent = '₹' + subtotal;
+      updateTopSummary();
+    }
+
+    function updateBadge(){
+      const cnt = Object.values(CART).reduce((s,n)=>s+n,0);
+      const badge = document.getElementById('cartCount');
+      if(cnt>0){ badge.style.display='inline-block'; badge.textContent = cnt; } else badge.style.display='none';
+    }
+    function updateTopSummary(){
+      const total = Object.keys(CART).reduce((s,id)=> s + (CART[id] * (PRODUCTS.find(p=>p.id===id)?.price||0)), 0);
+      document.getElementById('topTotal').textContent = '₹' + total;
+    }
+
+    function showCart(){ cartPanel.show(); }
+
+    // ---------------------
+    // UI helpers
+    // ---------------------
+    function quickView(id){
+      const p = PRODUCTS.find(x=>x.id===id);
+      if(!p) return alert('Product not found.');
+      // simple modal using prompt for demo (keeps single-file, no extra modal markup)
+      const want = confirm(`${p.title}\nPrice: ₹${p.price}\n\nAdd one to cart?`);
+      if(want) addToCart(id,1);
+    }
+
+    function checkout(){
+      if(Object.keys(CART).length===0) return alert('Cart is empty.');
+      // Demo checkout behavior:
+      alert('Thanks! Your order (demo) received. Subtotal: ' + document.getElementById('subtotal').textContent);
+      clearCart();
+      cartPanel.hide();
+    }
+
+    function submitContactForm(e){
+      e.preventDefault();
+      const name = document.getElementById('contactName').value;
+      const info = document.getElementById('contactInfo').value;
+      const msg = document.getElementById('contactMsg').value;
+      alert('Thanks, ' + name + '! We received your message. We will contact you at ' + info + '.');
+      document.getElementById('contactForm').reset();
+    }
+
+    function highlightSale(){
+      // small UI flourish: temporarily add sale badge to first product
+      const p = document.querySelector('.product-card');
+      if(!p) return;
+      p.style.boxShadow = '0 20px 60px rgba(255,122,24,0.12)';
+      setTimeout(()=> p.style.boxShadow = '', 1400);
+    }
+
+    function clearDemoData(){
+      if(confirm('Reset demo (clears cart & search)?')){
+        CART = {};
+        document.getElementById('searchInput').value = '';
+        document.getElementById('categoryFilter').value = 'all';
+        renderProducts();
+        renderCartItems();
+        updateBadge();
+      }
+    }
+
+    // Utilities
+    function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+    function escapeHtml(s){ return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+    // Bind cart button
+    document.getElementById('cartBtn').addEventListener('click', showCart);
+
+    // Initial render
+    renderProducts();
+    renderCartItems();
+  </script>
+</body>
+</html>
